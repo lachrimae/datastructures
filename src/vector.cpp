@@ -27,11 +27,12 @@ TEST_F(VectorTest, PopWorksWhenEmpty) {
   ASSERT_EQ(std::optional<int>(), val);
 }
 
-TEST_F(VectorTest, LargeExampleNoCrash) {
+TEST_F(VectorTest, LargeExample) {
   Vector<int> vec;
   for (int i = 0; i < 1025; i++) {
     vec.push(i);
   }
+  ASSERT_EQ(vec[512], 512);
   for (int i = 0; i < 1025; i++) {
     std::optional<int> last = vec.pop();
     ASSERT_EQ(last.value(), 1024 - i);
