@@ -1,8 +1,8 @@
 #ifndef H_VEC
 #include <cstring>
 #include <optional>
-
-#include "common.h"
+#include <stdexcept>
+#include <memory>
 
 #define INITIAL_LEN 8
 #define GROWTH_RATE 2
@@ -39,6 +39,8 @@ template <typename T> inline Vector<T>::Vector(size_t capacity) {
   this->array = new T[capacity];
 }
 
+template <typename T> inline Vector<T>::~Vector() { delete[] array; }
+
 template <typename T>
 inline Vector<T>::Vector(size_t length, T val) : Vector(length) {
   for (auto i = 0; i < length; i++) {
@@ -46,11 +48,9 @@ inline Vector<T>::Vector(size_t length, T val) : Vector(length) {
   }
 }
 
-template <typename T> inline Vector<T>::~Vector() { delete[] this->array; }
-
 template <typename T> inline T &Vector<T>::operator[](size_t index) {
   if (index >= length) {
-      throw IndexError("Attempted access outside of bounds");
+      throw std::out_of_range("Index out of range");
   }
   return this->array[index];
 }

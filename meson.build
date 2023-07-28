@@ -7,8 +7,14 @@ incdir = include_directories('inc')
 gtest_proj = subproject('gtest')
 gtest_dep = gtest_proj.get_variable('gtest_dep')
 
+srcs = [
+  'main.cpp',
+  'src/vector.cpp',
+  'src/linkedlist.cpp',
+]
+
 executable('datastructures',
-           'main.cpp',
+           srcs,
            dependencies : [gtest_dep],
            install : true,
            override_options : ['cpp_std=c++17'],

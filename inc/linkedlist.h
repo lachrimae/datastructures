@@ -4,7 +4,6 @@
 #include <optional>
 #include <stdexcept>
 
-#include "common.h"
 #include "vector.h"
 
 namespace curran {
@@ -14,7 +13,7 @@ struct Node {
     T val;
     Node<T> *prev;
     Node<T> *next;
-}
+};
 
 template <typename T>
 class LinkedList {
@@ -39,14 +38,14 @@ public:
 };
 
 template <typename T>
-inline LinkedList::LinkedList() {
+inline LinkedList<T>::LinkedList() {
     this->initial = NULL;
     this->terminal = NULL;
     this->length = 0;
 }
 
 template <typename T>
-inline LinkedList::LinkedList(Vector<T> vec) : LinkedList() {
+inline LinkedList<T>::LinkedList(Vector<T> vec) : LinkedList() {
     while (true) {
         std::optional<T> val = vec.pop();
         if (!val.has_value()) {
@@ -57,7 +56,7 @@ inline LinkedList::LinkedList(Vector<T> vec) : LinkedList() {
 }
 
 template <typename T>
-inline LinkedList::~LinkedList() {
+inline LinkedList<T>::~LinkedList() {
     Node<T> *current = this->initial;
     while (current) {
         Node<T> *next = current->next;
@@ -67,8 +66,8 @@ inline LinkedList::~LinkedList() {
 }
 
 template <typename T>
-inline void LinkedList::push(T val) {
-    Node<T> *node = new Node;
+inline void LinkedList<T>::push(T val) {
+    Node<T> *node = new Node<T>;
     node->prev = this->terminal;
     node->next = NULL;
     node->val = val;
@@ -82,9 +81,9 @@ inline void LinkedList::push(T val) {
 }
 
 template <typename T>
-inline std::optional<T> LinkedList::pop() {
+inline std::optional<T> LinkedList<T>::pop() {
     if (this->length <= 0) {
-        return std::optional();
+        return std::optional<T>();
     }
     Node<T> *terminal = this->terminal;
     T val = terminal->val;
@@ -98,8 +97,8 @@ inline std::optional<T> LinkedList::pop() {
 }
 
 template <typename T>
-inline void LinkedList push_front(T val) {
-    Node<T> *node = new Node;
+inline void LinkedList<T>::push_front(T val) {
+    Node<T> *node = new Node<T>;
     node->prev = NULL;
     node->next = this->initial;
     node->val = val;
@@ -113,9 +112,9 @@ inline void LinkedList push_front(T val) {
 }
 
 template <typename T>
-inline std::optional<T> LinkedList::pop_front() {
+inline std::optional<T> LinkedList<T>::pop_front() {
     if (this->length <= 0) {
-        return std::optional();
+        return std::optional<T>();
     }
     Node<T> *initial = this->initial;
     T val = initial->val;
@@ -129,7 +128,7 @@ inline std::optional<T> LinkedList::pop_front() {
 }
 
 template <typename T>
-inline void LinkedList::insert(size_t index, T val) {
+inline void LinkedList<T>::insert(size_t index, T val) {
     if (index == 0) {
         this->push_front(val);
         return;
@@ -137,7 +136,7 @@ inline void LinkedList::insert(size_t index, T val) {
         this->push(val);
         return;
     } else if (index > this->length || index < 0) {
-        throw IndexError();
+        throw std::out_of_range("Index out of range");
     }
     if (index * 2 > this->length) {
         this->insert_from_rear(index, val);
@@ -147,12 +146,12 @@ inline void LinkedList::insert(size_t index, T val) {
 }
 
 template <typename T>
-inline void LinkedList::insert_from_front(size_t index, T val) {
+inline void LinkedList<T>::insert_from_front(size_t index, T val) {
     return;
 }
 
 template <typename T>
-inline void LinkedList::insert_from_rear(size_t index, T val) {
+inline void LinkedList<T>::insert_from_rear(size_t index, T val) {
     return;
 }
 
