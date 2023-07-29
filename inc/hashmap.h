@@ -1,6 +1,4 @@
-#ifndef H_HASHMAP
-#define H_HASHMAP
-
+#pragma once
 #include <optional>
 
 namespace curran {
@@ -15,4 +13,3 @@ private:
 
 };
 } // namespace curran
-#endif // H_HASHMAP

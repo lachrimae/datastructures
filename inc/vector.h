@@ -1,4 +1,4 @@
-#ifndef H_VEC
+#pragma once
 #include <cstring>
 #include <optional>
 #include <stdexcept>
@@ -86,4 +86,3 @@ template <typename T> inline std::optional<T> Vector<T>::pop() {
 template <typename T> inline void Vector<T>::clear() { this->length = 0; }
 
 } // namespace curran
-#endif // H_VEC

@@ -1,5 +1,4 @@
-#ifndef H_LINKED_LIST
-#define H_LINKED_LIST
+#pragma once
 
 #include <optional>
 #include <stdexcept>
@@ -10,9 +9,9 @@ namespace curran {
 
 template <typename T>
 struct Node {
-    T val;
     Node<T> *prev;
     Node<T> *next;
+    T val;
 };
 
 template <typename T>
@@ -156,5 +155,3 @@ inline void LinkedList<T>::insert_from_rear(size_t index, T val) {
 }
 
 } // namespace curran
-
-#endif // H_LINKED_LIST

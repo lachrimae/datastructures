@@ -11,6 +11,7 @@ srcs = [
   'main.cpp',
   'src/vector.cpp',
   'src/linkedlist.cpp',
+  'src/hashmap.cpp',
 ]
 
 executable('datastructures',
