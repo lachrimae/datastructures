@@ -8,6 +8,22 @@ namespace curran {
 
 class VectorTest : public ::testing::Test {};
 
+TEST_F(VectorTest, ConstructorDestructor) { Vector<int> vec; }
+
+TEST_F(VectorTest, CopyAndAssign) {
+  Vector<int> vec;
+  vec.push(1);
+  vec.push(2);
+  Vector<int> vec2(vec);
+  Vector<int> vec3 = vec;
+  ASSERT_EQ(vec3.pop(), std::optional<int>(2));
+  ASSERT_EQ(vec3.pop(), std::optional<int>(1));
+  ASSERT_EQ(vec2.pop(), std::optional<int>(2));
+  ASSERT_EQ(vec2.pop(), std::optional<int>(1));
+  ASSERT_EQ(vec.pop(), std::optional<int>(2));
+  ASSERT_EQ(vec.pop(), std::optional<int>(1));
+}
+
 TEST_F(VectorTest, PushWorks) {
   Vector<int> vec;
   vec.push(1);

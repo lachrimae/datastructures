@@ -1,7 +1,7 @@
 #pragma once
-
 #include <optional>
 #include <stdexcept>
+#include <utility>
 
 #include "vector.h"
 
@@ -10,7 +10,7 @@ namespace curran {
 template <typename T> struct Node {
   Node<T> *prev;
   Node<T> *next;
-  T val;
+  T *val;
 };
 
 template <typename T> class LinkedList {
@@ -29,12 +29,13 @@ public:
   LinkedList(const LinkedList<T> &);
   LinkedList<T> &operator=(const LinkedList<T> &other);
   ~LinkedList();
-  void push(T val);
+  void push(const T &val);
   std::optional<T> pop();
-  void push_front(T val);
+  void push_front(const T &val);
   std::optional<T> pop_front();
   void insert(size_t index, T val);
   T &operator[](size_t index);
+  const T &operator[](size_t index) const;
   void del(size_t index);
   size_t length();
 };
@@ -52,13 +53,13 @@ inline LinkedList<T>::LinkedList(Vector<T> &vec) : LinkedList() {
     if (!val.has_value()) {
       break;
     }
-    this->push_front(val.value());
+    push_front(val.value());
   }
 }
 
 template <typename T>
 inline LinkedList<T>::LinkedList(const LinkedList<T> &other) : LinkedList() {
-  for (int i = 0; i < other.length_; i++) {
+  for (size_t i = 0; i < other.length_; i++) {
     push(other[i]);
   }
 }
@@ -66,7 +67,7 @@ inline LinkedList<T>::LinkedList(const LinkedList<T> &other) : LinkedList() {
 template <typename T>
 inline LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other) {
   if (this != &other) {
-    for (int i = 0; i < other.length_; i++) {
+    for (size_t i = 0; i < other.length_; i++) {
       if (i < length_) {
         (*this)[i] = other[i];
       } else {
@@ -81,16 +82,19 @@ template <typename T> inline LinkedList<T>::~LinkedList() {
   Node<T> *current = this->initial;
   while (current) {
     Node<T> *next = current->next;
+    delete current->val;
     delete current;
     current = next;
   }
 }
 
-template <typename T> inline void LinkedList<T>::push(T val) {
+template <typename T> inline void LinkedList<T>::push(const T &val) {
   Node<T> *node = new Node<T>;
   node->prev = this->terminal;
   node->next = NULL;
-  node->val = val;
+  T *val_ptr = new T;
+  *val_ptr = val;
+  node->val = val_ptr;
   if (this->terminal) {
     this->terminal->next = node;
   } else {
@@ -105,7 +109,8 @@ template <typename T> inline std::optional<T> LinkedList<T>::pop() {
     return std::optional<T>();
   }
   Node<T> *terminal = this->terminal;
-  T val = terminal->val;
+  T val = *terminal->val;
+  delete terminal->val;
   if (this->initial == terminal) {
     this->initial = NULL;
   }
@@ -115,11 +120,13 @@ template <typename T> inline std::optional<T> LinkedList<T>::pop() {
   return std::optional(val);
 }
 
-template <typename T> inline void LinkedList<T>::push_front(T val) {
+template <typename T> inline void LinkedList<T>::push_front(const T &val) {
   Node<T> *node = new Node<T>;
   node->prev = NULL;
   node->next = this->initial;
-  node->val = val;
+  T *val_ptr = new T;
+  *val_ptr = val;
+  node->val = val_ptr;
   if (this->initial) {
     this->initial->prev = node;
   } else {
@@ -134,7 +141,8 @@ template <typename T> inline std::optional<T> LinkedList<T>::pop_front() {
     return std::optional<T>();
   }
   Node<T> *initial = this->initial;
-  T val = initial->val;
+  T val = *initial->val;
+  delete initial->val;
   this->initial = initial->next;
   this->length_--;
   if (length_ == 0) {
@@ -152,7 +160,7 @@ template <typename T> inline void LinkedList<T>::insert(size_t index, T val) {
     this->push(val);
     return;
   } else if (index > this->length_ || index < 0) {
-    throw std::out_of_range("Index out of range");
+    throw std::out_of_range("LinkedList<T>::insert: index out of range");
   }
   if (index * 2 > this->length_) {
     this->insert_from_rear(index, val);
@@ -162,9 +170,21 @@ template <typename T> inline void LinkedList<T>::insert(size_t index, T val) {
 }
 
 template <typename T> inline T &LinkedList<T>::operator[](size_t index) {
-  T *ptr = new T;
-  T val = *ptr;
-  return val;
+  return const_cast<T &>(std::as_const(*this)[index]);
+}
+
+template <typename T>
+inline const T &LinkedList<T>::operator[](size_t index) const {
+  if (index >= length_) {
+    throw std::out_of_range("LinkedList<T>::operator[]: index out of range");
+  }
+  size_t current_index = 0;
+  const Node<T> *current = initial;
+  while (current_index < index) {
+    current = current->next;
+    current_index++;
+  }
+  return *current->val;
 }
 
 template <typename T>
