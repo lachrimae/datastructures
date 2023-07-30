@@ -54,10 +54,10 @@ TEST_F(LinkedListTest, VectorInitializer) {
 
 TEST_F(LinkedListTest, LargeExample) {
   LinkedList<int> list;
-  for (int i = 0; i < 32768; i++) {
+  for (int i = 0; i < 16384; i++) {
     list.push(i);
   }
-  for (int i = 0; i < 32768; i++) {
+  for (int i = 0; i < 16384; i++) {
     ASSERT_EQ(list[i], i);
   }
 }

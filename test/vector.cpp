@@ -45,13 +45,13 @@ TEST_F(VectorTest, PopWorksWhenEmpty) {
 
 TEST_F(VectorTest, LargeExample) {
   Vector<int> vec;
-  for (int i = 0; i < 1025; i++) {
+  for (int i = 0; i < 32768; i++) {
     vec.push(i);
   }
   ASSERT_EQ(vec[512], 512);
-  for (int i = 0; i < 1025; i++) {
+  for (int i = 0; i < 32768; i++) {
     std::optional<int> last = vec.pop();
-    ASSERT_EQ(last.value(), 1024 - i);
+    ASSERT_EQ(last.value(), 32768 - 1 - i);
   }
 }
 

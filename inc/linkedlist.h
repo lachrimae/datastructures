@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <utility>
 
+#include "common.h"
 #include "vector.h"
 
 namespace curran {
@@ -20,8 +21,8 @@ private:
   size_t length_;
   void insert_from_rear(size_t index, T val);
   void insert_from_front(size_t index, T val);
-  void del_from_front(size_t index, T val);
-  void del_from_rear(size_t index, T val);
+  void del_from_front(size_t index);
+  void del_from_rear(size_t index);
 
 public:
   LinkedList();
@@ -189,12 +190,24 @@ inline const T &LinkedList<T>::operator[](size_t index) const {
 
 template <typename T>
 inline void LinkedList<T>::insert_from_front(size_t index, T val) {
-  return;
+  throw NotImplemented();
 }
 
 template <typename T>
 inline void LinkedList<T>::insert_from_rear(size_t index, T val) {
-  return;
+  throw NotImplemented();
+}
+
+template <typename T> inline void LinkedList<T>::del(size_t index) {
+  throw NotImplemented();
+}
+
+template <typename T> inline void LinkedList<T>::del_from_front(size_t index) {
+  throw NotImplemented();
+}
+
+template <typename T> inline void LinkedList<T>::del_from_rear(size_t index) {
+  throw NotImplemented();
 }
 
 template <typename T> inline size_t LinkedList<T>::length() { return length_; }

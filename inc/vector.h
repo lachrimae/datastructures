@@ -5,8 +5,6 @@
 #include <stdexcept>
 #include <utility>
 
-#include <iostream>
-
 constexpr size_t vector_initial_len__ = 8;
 constexpr size_t vector_growth_rate__ = 2;
 

@@ -1,5 +1,11 @@
-#ifndef H_COMMON
-#define H_COMMON
+#pragma once
+#include <stdexcept>
 
-namespace curran {} // namespace curran
-#endif              // H_COMMON
+namespace curran {
+
+class NotImplemented : public std::logic_error {
+public:
+  NotImplemented() : std::logic_error("Function not yet implemented"){};
+};
+
+} // namespace curran
