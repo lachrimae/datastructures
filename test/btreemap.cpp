@@ -1,4 +1,4 @@
-#include "hashmap.h"
+#include "btreemap.h"
 
 #include <optional>
 
@@ -6,18 +6,18 @@
 
 namespace curran {
 
-class HashMapTest : public ::testing::Test {};
+class BTreeMapTest : public ::testing::Test {};
 
-TEST_F(HashMapTest, ConstructDestruct) { HashMap<int, int> h; }
+TEST_F(BTreeMapTest, ConstructDestruct) { BTreeMap<int, int> h; }
 
-TEST_F(HashMapTest, HasItem) {
-  HashMap<int, int> h;
+TEST_F(BTreeMapTest, HasItem) {
+  BTreeMap<int, int> h;
   h.set(0, 1);
   ASSERT_EQ(h.has(0), true);
 }
 
-TEST_F(HashMapTest, SetGetDelete) {
-  HashMap<int, int> h;
+TEST_F(BTreeMapTest, SetGetDelete) {
+  BTreeMap<int, int> h;
   ASSERT_EQ(h.get(0), std::optional<int>());
   h.set(0, 1);
   ASSERT_EQ(h.get(0), std::optional<int>(1));
@@ -29,8 +29,8 @@ TEST_F(HashMapTest, SetGetDelete) {
   ASSERT_EQ(h.get(0), std::optional<int>(3));
 }
 
-TEST_F(HashMapTest, LargeExample) {
-  HashMap<int, int> h;
+TEST_F(BTreeMapTest, LargeExample) {
+  BTreeMap<int, int> h;
   for (int i = 0; i < 1024; i++) {
     h.set(i, i);
   }

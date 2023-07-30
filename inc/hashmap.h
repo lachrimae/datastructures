@@ -63,7 +63,16 @@ template <typename Key, typename Val> inline HashMap<Key, Val>::~HashMap() {
 template <typename Key, typename Val>
 inline void HashMap<Key, Val>::set(Key key, Val val) {
   unsigned long int index = hash_key(key);
-  entries[index]->push(std::pair<Key, Val>(key, val));
+  bool already_in_list = false;
+  for (size_t i = 0; i < entries[index]->length(); i++) {
+    if (key == at_index(index)[i].first) {
+      already_in_list = true;
+      at_index(index)[i].second = val;
+    }
+  }
+  if (!already_in_list) {
+    entries[index]->push(std::pair<Key, Val>(key, val));
+  }
 }
 
 template <typename Key, typename Val>
