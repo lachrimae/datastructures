@@ -16,6 +16,13 @@ TEST_F(LinkedListTest, PushAndPop) {
     ASSERT_EQ(val, std::optional<int>(1));
 }
 
+TEST_F(LinkedListTest, PushAndPopFront) {
+    LinkedList<int> list;
+    list.push_front(1);
+    std::optional<int> val = list.pop_front();
+    ASSERT_EQ(val, std::optional<int>(1));
+}
+
 TEST_F(LinkedListTest, VectorInitializer) {
     Vector<int> vec;
     for (int i = 0; i < 16; i++) {

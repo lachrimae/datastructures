@@ -1,6 +1,6 @@
 project('datastructures', 'cpp',
   version : '0.1',
-  default_options : ['warning_level=3', 'cpp_std=c++17'])
+  default_options : ['warning_level=3', 'cpp_std=c++20'])
 
 incdir = include_directories('inc')
 
@@ -9,14 +9,14 @@ gtest_dep = gtest_proj.get_variable('gtest_dep')
 
 srcs = [
   'main.cpp',
-  'src/vector.cpp',
-  'src/linkedlist.cpp',
-  'src/hashmap.cpp',
+  'test/vector.cpp',
+  'test/linkedlist.cpp',
+  'test/hashmap.cpp',
 ]
 
 executable('datastructures',
            srcs,
            dependencies : [gtest_dep],
            install : true,
-           override_options : ['cpp_std=c++17'],
+           override_options : ['cpp_std=c++20'],
            include_directories : incdir)

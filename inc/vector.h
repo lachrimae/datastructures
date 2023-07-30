@@ -1,8 +1,10 @@
 #pragma once
+#include <bit>
 #include <cstring>
 #include <optional>
 #include <stdexcept>
-#include <memory>
+
+#include <iostream>
 
 #define INITIAL_LEN 8
 #define GROWTH_RATE 2
@@ -13,76 +15,87 @@ template <typename T> class Vector {
 public:
   Vector();
   Vector(size_t capacity);
-  Vector(size_t length, T val);
+  Vector(size_t length_, T val);
+  Vector(const Vector &);
   ~Vector();
   T &operator[](size_t index);
   void push(T val);
   std::optional<T> pop();
   void clear();
+  size_t length();
 
 private:
   void grow_capacity();
-  size_t length;
+  size_t length_;
   size_t capacity;
   T *array;
 };
 
 template <typename T> inline Vector<T>::Vector() {
-  length = 0;
+  length_ = 0;
   capacity = INITIAL_LEN;
-  this->array = new T[INITIAL_LEN];
+  array = new T[INITIAL_LEN];
 }
 
 template <typename T> inline Vector<T>::Vector(size_t capacity) {
-  length = 0;
-  this->capacity = capacity;
-  this->array = new T[capacity];
+  length_ = 0;
+  capacity = capacity;
+  array = new T[capacity];
 }
 
 template <typename T> inline Vector<T>::~Vector() { delete[] array; }
 
 template <typename T>
-inline Vector<T>::Vector(size_t length, T val) : Vector(length) {
-  for (auto i = 0; i < length; i++) {
-    this->array[i] = val;
+inline Vector<T>::Vector(size_t length_, T val) : Vector(length_) {
+  for (auto i = 0; i < length_; i++) {
+    array[i] = val;
   }
+}
+
+template <typename T> inline Vector<T>::Vector(const Vector<T> &other) {
+  length_ = other.length_;
+  capacity = std::bit_ceil<size_t>(length_);
+  array = new T[capacity];
+  std::memcpy(array, other.array, length_ * sizeof(T));
 }
 
 template <typename T> inline T &Vector<T>::operator[](size_t index) {
-  if (index >= length) {
-      throw std::out_of_range("Index out of range");
+  if (index >= length_) {
+    throw std::out_of_range("Index out of range");
   }
-  return this->array[index];
+  return array[index];
 }
 
 template <typename T> inline void Vector<T>::push(T val) {
-  if (length >= capacity) {
-    this->grow_capacity();
+  if (length_ >= capacity) {
+    grow_capacity();
   }
-  this->array[length] = val;
-  length++;
+  array[length_] = val;
+  length_++;
 }
 
 template <typename T> inline void Vector<T>::grow_capacity() {
-  size_t next_capacity = this->capacity * GROWTH_RATE;
-  T *next_array = new T[next_capacity];
-  std::memcpy(next_array, this->array, this->capacity * sizeof(T));
-  this->capacity = next_capacity;
-  delete[] this->array;
-  this->array = next_array;
+  T *old_array = array;
+  size_t old_capacity = capacity;
+  capacity *= GROWTH_RATE;
+  array = new T[capacity];
+  std::memcpy(array, old_array, old_capacity * sizeof(T));
+  delete[] old_array;
 }
 
 template <typename T> inline std::optional<T> Vector<T>::pop() {
   std::optional<T> val;
-  if (this->length == 0) {
+  if (length_ == 0) {
     return val;
   } else {
-    val = this->array[length - 1];
-    this->length--;
+    val = array[length_ - 1];
+    length_--;
     return val;
   }
 }
 
-template <typename T> inline void Vector<T>::clear() { this->length = 0; }
+template <typename T> inline void Vector<T>::clear() { length_ = 0; }
+
+template <typename T> inline size_t Vector<T>::length() { return length_; }
 
 } // namespace curran
