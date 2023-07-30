@@ -93,8 +93,7 @@ template <typename T> inline void LinkedList<T>::push(const T &val) {
   Node<T> *node = new Node<T>;
   node->prev = this->terminal;
   node->next = NULL;
-  T *val_ptr = new T;
-  *val_ptr = val;
+  T *val_ptr = new T(val);
   node->val = val_ptr;
   if (this->terminal) {
     this->terminal->next = node;
@@ -125,8 +124,7 @@ template <typename T> inline void LinkedList<T>::push_front(const T &val) {
   Node<T> *node = new Node<T>;
   node->prev = NULL;
   node->next = this->initial;
-  T *val_ptr = new T;
-  *val_ptr = val;
+  T *val_ptr = new T(val);
   node->val = val_ptr;
   if (this->initial) {
     this->initial->prev = node;
@@ -147,7 +145,7 @@ template <typename T> inline std::optional<T> LinkedList<T>::pop_front() {
   this->initial = initial->next;
   this->length_--;
   if (length_ == 0) {
-    this->terminal = NULL;
+    terminal = NULL;
   }
   delete initial;
   return std::optional(val);
@@ -155,18 +153,18 @@ template <typename T> inline std::optional<T> LinkedList<T>::pop_front() {
 
 template <typename T> inline void LinkedList<T>::insert(size_t index, T val) {
   if (index == 0) {
-    this->push_front(val);
+    push_front(val);
     return;
   } else if (index == this->length_) {
-    this->push(val);
+    push(val);
     return;
-  } else if (index > this->length_ || index < 0) {
+  } else if (index > this->length_) {
     throw std::out_of_range("LinkedList<T>::insert: index out of range");
   }
   if (index * 2 > this->length_) {
-    this->insert_from_rear(index, val);
+    insert_from_rear(index, val);
   } else {
-    this->insert_from_front(index, val);
+    insert_from_front(index, val);
   }
 }
 
@@ -190,24 +188,87 @@ inline const T &LinkedList<T>::operator[](size_t index) const {
 
 template <typename T>
 inline void LinkedList<T>::insert_from_front(size_t index, T val) {
-  throw NotImplemented();
+  Node<T> *current = initial;
+  size_t current_index = 0;
+  while (current_index < index) {
+    current = current->next;
+    current_index++;
+  }
+  Node<T> *new_entry = new Node<T>;
+  T *val_ptr = new T(val);
+  Node<T> *prev_node = current->prev;
+  new_entry->val = val_ptr;
+  new_entry->prev = prev_node;
+  new_entry->next = current;
+  prev_node->next = current;
+  current->prev = current;
+  length_++;
 }
 
 template <typename T>
 inline void LinkedList<T>::insert_from_rear(size_t index, T val) {
-  throw NotImplemented();
+  Node<T> *current = terminal;
+  size_t current_index = length_ - 1;
+  while (current_index > index) {
+    current = current->prev;
+    current_index--;
+  }
+  Node<T> *new_entry = new Node<T>;
+  T *val_ptr = new T(val);
+  Node<T> *prev_node = current->prev;
+  new_entry->val = val_ptr;
+  new_entry->prev = prev_node;
+  new_entry->next = current;
+  prev_node->next = current;
+  current->prev = current;
+  length_++;
 }
 
 template <typename T> inline void LinkedList<T>::del(size_t index) {
-  throw NotImplemented();
+  if (index == 0) {
+    pop_front();
+    return;
+  } else if (index == this->length_) {
+    pop();
+    return;
+  } else if (index > this->length_) {
+    throw std::out_of_range("LinkedList<T>::insert: index out of range");
+  }
+  if (index * 2 > this->length_) {
+    del_from_rear(index);
+  } else {
+    del_from_front(index);
+  }
 }
 
 template <typename T> inline void LinkedList<T>::del_from_front(size_t index) {
-  throw NotImplemented();
+  Node<T> *current = initial;
+  size_t current_index = 0;
+  while (current_index < index) {
+    current = current->next;
+    current_index++;
+  }
+  if (current->prev)
+    current->prev->next = current->next;
+  if (current->next)
+    current->next->prev = current->prev;
+  delete current->val;
+  delete current;
 }
 
 template <typename T> inline void LinkedList<T>::del_from_rear(size_t index) {
-  throw NotImplemented();
+  Node<T> *current = initial;
+  size_t current_index = 0;
+  while (current_index < index) {
+    current = current->next;
+    current_index++;
+  }
+  if (current->prev)
+    current->prev->next = current->next;
+  if (current->next)
+    current->next->prev = current->prev;
+  delete current->val;
+  delete current;
 }
 
 template <typename T> inline size_t LinkedList<T>::length() { return length_; }

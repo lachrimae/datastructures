@@ -37,10 +37,10 @@ template <typename T> inline Vector<T>::Vector() {
   array = new T[vector_initial_len__];
 }
 
-template <typename T> inline Vector<T>::Vector(size_t capacity) {
+template <typename T> inline Vector<T>::Vector(size_t cap) {
   length_ = 0;
-  capacity = capacity;
-  array = new T[capacity];
+  capacity = cap;
+  array = new T[cap];
 }
 
 template <typename T> inline Vector<T>::~Vector() { delete[] array; }

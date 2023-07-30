@@ -16,10 +16,13 @@ TEST_F(HashMapTest, HasItem) {
   ASSERT_EQ(h.has(0), true);
 }
 
-TEST_F(HashMapTest, SetGet) {
+TEST_F(HashMapTest, SetGetDelete) {
   HashMap<int, int> h;
+  ASSERT_EQ(h.get(0), std::optional<int>());
   h.set(0, 1);
   ASSERT_EQ(h.get(0), std::optional<int>(1));
+  h.del(0);
+  ASSERT_EQ(h.get(0), std::optional<int>());
 }
 
 TEST_F(HashMapTest, LargeExample) {

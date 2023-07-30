@@ -49,7 +49,7 @@ inline HashMap<Key, Val>::HashMap() : HashMap(default_entries_len__) {}
 template <typename Key, typename Val>
 inline HashMap<Key, Val>::HashMap(size_t capacity) : entries(capacity) {
   for (size_t i = 0; i < capacity; i++) {
-    LinkedList<std::pair<Key, Val>> *ll = new LinkedList<std::pair<Key, Val>>();
+    LinkedList<std::pair<Key, Val>> *ll = new LinkedList<std::pair<Key, Val>>;
     entries.push(ll);
   }
 }
