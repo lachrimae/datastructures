@@ -162,7 +162,9 @@ template <typename T> inline void LinkedList<T>::insert(size_t index, T val) {
 }
 
 template <typename T> inline T &LinkedList<T>::operator[](size_t index) {
-  return NULL;
+  T *ptr = new T;
+  T val = *ptr;
+  return val;
 }
 
 template <typename T>

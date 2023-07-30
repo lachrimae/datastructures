@@ -52,7 +52,7 @@ inline void HashMap<Key, Val>::set(Key key, Val val) {
 template <typename Key, typename Val>
 constexpr inline LinkedList<std::pair<Key, Val>> &
 HashMap<Key, Val>::at_index(size_t index) {
-  return entries[index];
+  return *entries[index];
 }
 
 template <typename Key, typename Val>
@@ -77,7 +77,6 @@ template <typename Key, typename Val> void HashMap<Key, Val>::del(Key key) {
     return;
   }
 }
-}
 
 template <typename Key, typename Val> bool HashMap<Key, Val>::has(Key key) {
   unsigned long int index = hash<Key>(&key);
@@ -85,8 +84,7 @@ template <typename Key, typename Val> bool HashMap<Key, Val>::has(Key key) {
     if (key == at_index(index)[i].first)
       return true;
   }
-}
-return false;
+  return false;
 }
 
 } // namespace curran
