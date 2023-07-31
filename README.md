@@ -1,6 +1,8 @@
 # `datastructures`
 I created this project to brush up on my C++ and datastructures skills. The `main()` function gathers up the tests in `test/` and runs them all.
 
+This project is a work in progress, I'm currently working on the B-tree map. Over time I want to add additional datastructures like graphs, tries, etc.
+
 # Building and running
 ```bash
 meson setup build
