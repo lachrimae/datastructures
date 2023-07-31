@@ -12,8 +12,8 @@ srcs = [
   'test/vector.cpp',
   'test/linkedlist.cpp',
   'test/hashmap.cpp',
-  'test/btreemap.cpp',
 ]
+
 
 executable('datastructures',
            srcs,

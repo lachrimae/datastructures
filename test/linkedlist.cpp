@@ -30,6 +30,10 @@ TEST_F(LinkedListTest, PushAndPop) {
   list.push(1);
   std::optional<int> val = list.pop();
   ASSERT_EQ(val, std::optional<int>(1));
+  list.push(1);
+  val = list.pop_front();
+  ASSERT_EQ(val, std::optional<int>(1));
+  ASSERT_EQ(list.pop(), std::optional<int>());
 }
 
 TEST_F(LinkedListTest, PushAndPopFront) {
