@@ -66,4 +66,27 @@ TEST_F(LinkedListTest, LargeExample) {
   }
 }
 
+TEST_F(LinkedListTest, AlternatingPops) {
+  LinkedList<int> list;
+  list.push(1);
+  list.push(2);
+  list.push(3);
+  list.push(4);
+  list.push(5);
+  std::optional<int> val = list.pop();
+  ASSERT_EQ(val, std::optional<int>(5));
+  val = list.pop_front();
+  ASSERT_EQ(val, std::optional<int>(1));
+  val = list.pop();
+  ASSERT_EQ(val, std::optional<int>(4));
+  val = list.pop_front();
+  ASSERT_EQ(val, std::optional<int>(2));
+  int raw_val = list[0];
+  ASSERT_EQ(raw_val, 3);
+  val = list.pop();
+  ASSERT_EQ(val, std::optional<int>(3));
+  val = list.pop_front();
+  ASSERT_EQ(val, std::optional<int>());
+}
+
 } // namespace curran

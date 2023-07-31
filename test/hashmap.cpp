@@ -23,14 +23,16 @@ TEST_F(HashMapTest, SetGetDelete) {
   ASSERT_EQ(h.get(0), std::optional<int>(1));
   h.set(0, 2);
   ASSERT_EQ(h.get(0), std::optional<int>(2));
+  h.set(0, 2);
+  ASSERT_EQ(h.get(0), std::optional<int>(2));
   h.del(0);
   ASSERT_EQ(h.get(0), std::optional<int>());
   h.set(0, 3);
   ASSERT_EQ(h.get(0), std::optional<int>(3));
 }
 
-TEST_F(HashMapTest, LargeExample) {
-  HashMap<int, int> h;
+TEST_F(HashMapTest, MoreValsThanBuckets) {
+  HashMap<int, int> h(8);
   for (int i = 0; i < 1024; i++) {
     h.set(i, i);
   }
