@@ -1,49 +1,49 @@
 #pragma once
 
-#include <stdexcept>
 #include <functional>
 #include <optional>
+#include <stdexcept>
 
 namespace curran {
 
 // We use 3-trees here.
 
-template <typename Key, typename Val>
-struct Node {
+template <typename Key, typename Val> struct Node {
   Key key;
   Val *val;
   Node<Key, Val> *parent;
   Node<Key, Val> *left_child;
   Node<Key, Val> *centre_child;
   Node<Key, Val> *right_child;
-  bool full() {
-    return left_child && centre_child && right_child;
-  }
+  bool full() { return left_child && centre_child && right_child; }
+};
+
+template <typename Key, typename Val> class BTreeMap {
+public:
+  BTreeMap();
+  BTreeMap(std::function<char(Key, Key)> comparator);
+  void set(Key key, Val val);
+  std::optional<Val> get(Key key);
+  void del(Key key);
+  bool has(Key key);
+
+private:
+  Node<Key, Val> *root;
+  std::optional<std::function<char(Key, Key)>> comparator;
+  char comparator_(Key a, Key b);
 };
 
 template <typename Key, typename Val>
-class BTreeMap {
-  public:
-    BTreeMap();
-    BTreeMap(std::function<char(Key, Key)> comparator);
-    void set(Key key, Val val);
-    std::optional<Val> get(Key key);
-    void del(Key key);
-    bool has(Key key);
-  private:
-    Node<Key, Val> *root;
-    std::optional<std::function<char(Key, Key)>> comparator;
-    char comparator_(Key a, Key b);
-};
+inline BTreeMap<Key, Val>::BTreeMap()
+    : root(NULL), comparator(std::optional<std::function<char(Key, Key)>>()) {}
 
 template <typename Key, typename Val>
-inline BTreeMap<Key, Val>::BTreeMap() : root(NULL), comparator(std::optional<std::function<char(Key, Key)>>()) {}
+inline BTreeMap<Key, Val>::BTreeMap(std::function<char(Key, Key)> comparator)
+    : root(NULL),
+      comparator(std::optional<std::function<char(Key, Key)>>(comparator)) {}
 
 template <typename Key, typename Val>
-inline BTreeMap<Key, Val>::BTreeMap(std::function<char(Key, Key)> comparator) : root(NULL), comparator(std::optional<std::function<char(Key, Key)>>(comparator)) {}
-
-template <typename Key, typename Val>
-inline char comparator_(Key a, Key b) {
+inline char BTreeMap<Key, Val>::comparator_(Key a, Key b) {
   if (comparator.has_value()) {
     return comparator.value()(a, b);
   }
@@ -57,16 +57,16 @@ inline char comparator_(Key a, Key b) {
 }
 
 template <typename Key, typename Val>
-inline void set(Key key, Val val) {
+inline void BTreeMap<Key, Val>::set(Key key, Val val) {
   Node<Key, Val> *new_node = new Node<Key, Val>;
   {
     Val *val_ptr = new Val(val);
-    new_root->parent = NULL;
-    new_root->left_child = NULL;
-    new_root->centre_child = NULL;
-    new_root->right_child = NULL;
-    new_root->key = key;
-    new_root->val = val_ptr;
+    new_node->parent = NULL;
+    new_node->left_child = NULL;
+    new_node->centre_child = NULL;
+    new_node->right_child = NULL;
+    new_node->key = key;
+    new_node->val = val_ptr;
   }
 
   if (!root) {
@@ -96,10 +96,10 @@ inline void set(Key key, Val val) {
       current->centre_child = new_node;
       return;
     }
-    char diff_with_centre = comparator_(key, current->centre_child->key)
+    char diff_with_centre = comparator_(key, current->centre_child->key);
     if (diff_with_centre < 0) {
       if (current->full()) {
-        TODO
+        // TODO
       }
       current->right_child = current->centre_child;
       current->centre_child = new_node;
